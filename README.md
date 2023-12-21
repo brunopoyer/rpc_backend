@@ -1,66 +1,140 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# RPC - Gerenciamento de tarefas
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este é um projeto backend API REST desenvolvido em Laravel 10 utilizando o ambiente de contêineres Sail para facilitar a configuração e gerenciamento do ambiente de desenvolvimento. O sistema é um gerenciador de tarefas com funcionalidades básicas, incluindo a criação, edição, listagem e exclusão de tarefas, bem como a associação de tags às tarefas.
 
-## About Laravel
+## Pré-requisitos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Configuração do Ambiente
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Clone o repositório:**
 
-## Learning Laravel
+    ```bash
+    git clone https://github.com/brunopoyer/rpc_backend.git
+    cd rpc_backend
+    ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. **Copie o arquivo de exemplo de ambiente e configure conforme necessário:**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+    ```bash
+    cp .env.example .env
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. **Inicialize o ambiente Sail:**
 
-## Laravel Sponsors
+    ```bash
+    ./vendor/bin/sail up -d
+    ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+4. **Instale as dependências do Laravel:**
 
-### Premium Partners
+    ```bash
+    ./vendor/bin/sail composer install
+    ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+5. **Execute as migrações do banco de dados:**
 
-## Contributing
+    ```bash
+    ./vendor/bin/sail artisan migrate
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. **(Opcional) Execute os seeds para ter dados de exemplo:**
 
-## Code of Conduct
+    ```bash
+    ./vendor/bin/sail artisan db:seed
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Funcionalidades
 
-## Security Vulnerabilities
+### Tarefas
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- **Listar Tarefas:**
 
-## License
+    - Endpoint: `/tasks`
+    - Método: GET
+    - Descrição: Retorna uma lista de todas as tarefas.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Listar uma Tarefa:**
+    - Endpoint: `/tasks/{id}`
+    - Método: GET
+    - Descrição: Retorna dados de uma tarefa específica.
+
+- **Criar Tarefa:**
+
+    - Endpoint: `/tasks`
+    - Método: POST
+    - Descrição: Cria uma nova tarefa.
+    - Parâmetros:
+        - `name` (string): Título da tarefa.
+        - `description` (string): Descrição da tarefa.
+        - `due_date` (date): Prazo de execução da tarefa (formato: DD/MM/YYYY).
+        - `user_id` (integer): Id do usuário que está criando a tarefa.
+        - `tags` (array): Array com id das tags que serão associadas a tarefa.
+            - `id` (integer): Id da tag que está contida dentro do array de tags. 
+
+- **Editar Tarefa:**
+
+    - Endpoint: `/tasks/{id}`
+    - Método: PUT
+    - Descrição: Edita uma tarefa existente.
+    - Parâmetros:
+        - `title` (string): Novo título da tarefa.
+        - `description` (string): Nova descrição da tarefa.
+        - `due_date` (date): Novo prazo de execução da tarefa (formato: YYYY-MM-DD).
+        - `status` (string): Novo status da tarefa.
+        - `tags` (array): Array com id das tags que serão associadas a tarefa.
+            - `id`: (integer) Id da tag que está contida dentro do array de tags. 
+
+- **Excluir Tarefa:**
+
+    - Endpoint: `/tasks/{id}`
+    - Método: DELETE
+    - Descrição: Exclui uma tarefa.
+
+### Tags
+
+- **Listar Tags:**
+
+    - Endpoint: `/tags`
+    - Método: GET
+    - Descrição: Retorna uma lista de todas as tags.
+ 
+- **Listar uma Tag:**
+
+    - Endpoint: `/tags/{id}`
+    - Método: GET
+    - Descrição: Retorna uma única tag.
+
+- **Criar Tag:**
+
+    - Endpoint: `/tags`
+    - Método: POST
+    - Descrição: Cria uma nova tag.
+    - Parâmetros:
+        - `name` (string): Nome da tag.
+        - `color` (string): Cor da tag.
+
+- **Editar Tag:**
+
+    - Endpoint: `/tags/{id}`
+    - Método: PUT
+    - Descrição: Edita uma tag existente.
+    - Parâmetros:
+        - `name` (string): Novo nome da tag.
+        - `color` (string): Nova cor da tag.
+
+- **Excluir Tag:**
+
+    - Endpoint: `/tags/{id}`
+    - Método: DELETE
+    - Descrição: Exclui uma tag.
+
+## Contribuindo
+
+Sinta-se à vontade para contribuir com melhorias, correções de bugs ou novas funcionalidades. Abra uma **issue** para discussões ou envie um **pull request**.
+
+## Licença
+
+Este projeto é licenciado sob a [MIT License](LICENSE).
