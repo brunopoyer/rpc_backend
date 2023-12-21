@@ -61,7 +61,6 @@ class Task extends Model
     public static function convertDate($task)
     {
         $task->due_date = $task->due_date ? \Carbon\Carbon::createFromFormat('d/m/Y', $task->due_date)->format('Y-m-d') : null;
-        $task->completed_at = $task->completed_at ? \Carbon\Carbon::createFromFormat('d/m/Y', $task->completed_at)->format('Y-m-d') : null;
         return $task;
     }
 
@@ -79,6 +78,9 @@ class Task extends Model
 
         static::updating(function($task) {
             self::convertDate($task);
+            if ($task->status == StatusEnum::Done) {
+                $task->completed_at = date('Y-m-d');
+            }
         });
     }
 }

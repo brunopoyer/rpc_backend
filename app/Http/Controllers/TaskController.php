@@ -85,7 +85,6 @@ class TaskController extends Controller
             'tags' => 'array',
             'tags.*' => 'exists:tags,id',
             'due_date' => 'date_format:d/m/Y',
-            'completed_at' => 'date_format:d/m/Y',
             'status' => [
                 Rule::enum(StatusEnum::class),
             ],
