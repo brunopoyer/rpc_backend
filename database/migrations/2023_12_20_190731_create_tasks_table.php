@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('status')->default('todo');
-            $table->foreignId('user_id')->constrained();
             $table->timestamp('due_date')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->timestamp('deleted_at')->nullable();

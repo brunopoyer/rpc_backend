@@ -12,7 +12,7 @@ class TaskController extends Controller
     //
     public function list()
     {
-        $tasks = Task::with('tags', 'user')->get();
+        $tasks = Task::with('tags')->get();
 
         return response()->json([
             'success' => true,
@@ -22,7 +22,7 @@ class TaskController extends Controller
 
     public function get($id)
     {
-        $task = Task::with('tags', 'user')->find($id);
+        $task = Task::with('tags')->find($id);
 
         if (!$task) {
             return response()->json([
@@ -42,17 +42,15 @@ class TaskController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|max:255',
             'description' => 'required',
-            'user_id' => 'required|exists:users,id',
             'tags' => 'required|array',
             'tags.*' => 'exists:tags,id',
-            'due_date' => 'required|date_format:d/m/Y',
+            'due_date' => 'required|date_format:Y-m-d',
         ]);
 
         $task = Task::create([
             'name' => $validatedData['name'],
             'description' => $validatedData['description'],
-            'user_id' => $validatedData['user_id'],
-            'due_date' => \Carbon\Carbon::createFromFormat('d/m/Y', $validatedData['due_date'])->format('Y-m-d'),
+            'due_date' => $validatedData['due_date'],
             'status' => StatusEnum::Todo
         ]);
 
@@ -81,10 +79,9 @@ class TaskController extends Controller
         $validatedData = $request->validate([
             'name' => 'max:255',
             'description' => 'string',
-            'user_id' => 'exists:users,id',
             'tags' => 'array',
             'tags.*' => 'exists:tags,id',
-            'due_date' => 'date_format:d/m/Y',
+            'due_date' => 'date_format:Y-m-d',
             'status' => [
                 Rule::enum(StatusEnum::class),
             ],

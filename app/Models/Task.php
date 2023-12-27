@@ -14,7 +14,6 @@ class Task extends Model
         'name',
         'description',
         'status',
-        'user_id',
         'due_date',
         'completed_at',
         'deleted_at',
@@ -24,7 +23,6 @@ class Task extends Model
         'created_at',
         'updated_at',
         'deleted_at',
-        'user_id',
         'pivot'
     ];
 
@@ -51,11 +49,6 @@ class Task extends Model
             return null;
         }
         return date('d/m/Y', strtotime($value));
-    }
-
-    public function getStatusAttribute($value)
-    {
-        return StatusEnum::asOptions()[$value];
     }
 
     public static function convertDate($task)
