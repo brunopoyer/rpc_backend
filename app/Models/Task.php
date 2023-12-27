@@ -36,9 +36,11 @@ class Task extends Model
         return $this->belongsToMany(Tag::class, 'task_tag', 'task_id', 'tag_id');
     }
 
-    // convert due_date to date format
     public function getDueDateAttribute($value)
     {
+        if ($value instanceof \DateTime) {
+            $value = $value->format('Y-m-d');
+        }
         return date('d/m/Y', strtotime($value));
     }
 
@@ -47,6 +49,9 @@ class Task extends Model
     {
         if ($value == null) {
             return null;
+        }
+        if ($value instanceof \DateTime) {
+            $value = $value->format('Y-m-d');
         }
         return date('d/m/Y', strtotime($value));
     }

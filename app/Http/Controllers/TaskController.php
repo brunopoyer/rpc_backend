@@ -51,6 +51,7 @@ class TaskController extends Controller
             'name' => $validatedData['name'],
             'description' => $validatedData['description'],
             'due_date' => $validatedData['due_date'],
+            'completed_at' => $validatedData['completed_at'] ?? null,
             'status' => StatusEnum::Todo
         ]);
 

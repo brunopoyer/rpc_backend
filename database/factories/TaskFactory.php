@@ -18,10 +18,9 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            // get random user from database
-            'user_id' => User::all()->random(),
             'name' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
+            'status' => $this->faker->randomElement(['todo', 'doing', 'done']),
             'due_date' => $this->faker->dateTimeBetween('now', '+1 year'),
             'completed_at' => $this->faker->boolean(20) ? $this->faker->dateTimeBetween('now', '+1 year') : null,
         ];
