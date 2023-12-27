@@ -45,6 +45,16 @@ Este é um projeto backend API REST desenvolvido em Laravel 10 utilizando o ambi
     ```bash
     ./vendor/bin/sail artisan db:seed
     ```
+## Testes
+
+### Executando Testes
+
+Certifique-se de ter o ambiente configurado conforme as instruções de [Configuração do Ambiente](#configuração-do-ambiente).
+
+Execute os testes usando o seguinte comando:
+
+```bash
+./vendor/bin/sail artisan test
 
 ## Funcionalidades
 
