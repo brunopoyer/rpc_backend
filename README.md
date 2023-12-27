@@ -55,6 +55,7 @@ Execute os testes usando o seguinte comando:
 
 ```bash
 ./vendor/bin/sail artisan test
+```
 
 ## Funcionalidades
 
